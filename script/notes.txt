@@ -1,0 +1,92 @@
+01 Small
+02 Small (Up)
+03 Small (Down)
+04 Medium 1
+05 Medium 1 (Up)
+06 Medium 1 (Down)
+07 Medium 2
+08 Medium 2 (Up)
+09 Medium 2 (Down)
+0A Large 1
+0B Large 2
+0C Raider
+0D Hammer
+0E Gemini
+0F Hold
+0G Masher
+0H Gear
+0O Speed 1 (Both)
+0P Speed 2 (Both)
+0Q Speed 3 (Both)
+0R Speed 1 (Low)
+0S Speed 2 (Low)
+0T Speed 3 (Low)
+0U Speed 1 (High)
+0V Speed 2 (High)
+0W Speed 3 (High)
+10 music
+11 Boss Melee 1
+12 Boss Melee 2
+13 Boss Projectile 1
+14 Boss Projectile 2
+15 Boss Projectile 3
+16 Boss Masher 1
+17 Boss Masher 2
+18 Boss Gear
+1A Boss Entrance
+1B Boss Exit
+1C Boss Ready Phase 1
+1D Boss End Phase 1
+1E Boss Ready Phase 2
+1F Boss End Phase 2
+1G Boss Swap Phase 1-2
+1H Boss Swap Phase 2-1
+1J Hide Notes
+1K Unhide Notes
+1L Hide Boss
+1M Unhide boss
+1O Scene Switch (Space Station)
+1P Scene Switch (Retrocity)
+1Q Scene Switch (Castle)
+1R Scene Switch (Rainy Night)
+1S Scene Switch (Candyland)
+1T Scene Switch (Oriental)
+1U Scene Switch (Groove Coaster)
+1V Scene Switch (Touhou)
+1W Scene Switch (DJMAX)
+20 P Item
+21 Ghost
+22 Heart
+23 Note
+25 Hide Background
+26 Unhide Background
+27 Screen Scroll UP
+28 Screen Scroll DOWN
+29 Screen Scroll OFF
+2A Scanline Ripples ON
+2B Scanline Ripples OFF
+2C Chromatic Aberration ON
+2D Chromatic Aberration OFF
+2E Vignette ON
+2F Vignette OFF
+2G TV static ON
+2H TV static OFF
+2I Flashbang START
+2J Flashbang MID
+2K Flashbang END
+30 Medium Bullet
+31 Medium Bullet (Up)
+32 Medium Bullet (Down)
+33 Medium Bullet (Laneshift)
+34 Small Bullet
+35 Small Bullet (Up)
+36 Small Bullet (Down)
+37 Small Bullet (Laneshift)
+38 Large Bullet
+39 Large Bullet (Up)
+3A Large Bullet (Down)
+3B Large Bullet (Laneshift)
+3C Boss Bullet 1
+3D Boss Bullet 1 (Laneshift)
+3E Boss Bullet 2
+3F Boss Bullet 2 (Laneshift)
