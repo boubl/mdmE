@@ -5,7 +5,9 @@
 
 # Custom
 out/
-include/*/
+include/*
+lib/*
+codeReview/
 
 # User-specific files
 *.rsuser

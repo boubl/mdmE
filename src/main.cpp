@@ -5,8 +5,11 @@
 #include <imgui/backends/imgui_impl_sdl.h>
 #include <SDL2/SDL_image.h>
 #include "bms.h"
-#include "ui.cpp"
+#include "ui.h"
+#include "bass/bass.h"
 #include "IconsFontAwesome5.h"
+#include "editor.h"
+#include "data.h"
 
 // Main code
 int main(int, char**)
@@ -29,22 +32,28 @@ int main(int, char**)
     SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_RESIZABLE);
     SDL_Window* window = SDL_CreateWindow("mdmE", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, window_flags);
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
-    
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
-    io.Fonts->AddFontFromFileTTF("data/fonts/Noto.ttf", 20.0f);
+    ImFont* defaultFont = io.Fonts->AddFontFromFileTTF("data/fonts/Noto.ttf", 20.0f);
 
     ImFontConfig config;
     config.MergeMode = true;
-    config.GlyphMinAdvanceX = 16.0f; // Use if you want to make the icon monospaced
+    config.GlyphMinAdvanceX = 16.0f; // make the icons monospaced
     static const ImWchar icon_ranges[] = { ICON_MIN_FA, ICON_MAX_FA, 0 };
     io.Fonts->AddFontFromFileTTF("data/fonts/fa-solid-900.ttf", 13.0f, &config, icon_ranges);
     io.Fonts->AddFontFromFileTTF("data/fonts/NotoTC.ttf", 16.0f, &config, io.Fonts->GetGlyphRangesChineseFull());
     io.Fonts->AddFontFromFileTTF("data/fonts/NotoJP.ttf", 16.0f, &config, io.Fonts->GetGlyphRangesJapanese());
     io.Fonts->AddFontFromFileTTF("data/fonts/NotoKR.ttf", 16.0f, &config, io.Fonts->GetGlyphRangesKorean());
+
+    ImFont* monoFont = io.Fonts->AddFontFromFileTTF("data/fonts/NotoMono.ttf", 20.0f);
     io.Fonts->Build();
+
+    Data::InitFonts(defaultFont, monoFont);
+    Data::LoadKits();
 
     // Setup Platform/Renderer backends
     ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
@@ -56,7 +65,13 @@ int main(int, char**)
 
     BMS::MDMFile file = BMS::MDMFile::MDMFile();
 
-    ui::MainLayout layout = ui::MainLayout(&file);
+    Editor ed = Editor(renderer, &file);
+
+    ui::MainLayout layout = ui::MainLayout(&file, &ed);
+
+
+    BASS_Init(-1, 44100, BASS_DEVICE_STEREO, 0, NULL);
+    BASS_Start();
 
     // Main loop
     bool done = false;
@@ -84,6 +99,8 @@ int main(int, char**)
         SDL_RenderClear(renderer);
         // Rendering
         ImGui::Render();
+        ed.Begin();
+        ed.DisplayBeatLayer(1);
         ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
         SDL_RenderPresent(renderer);
     }
@@ -92,6 +109,8 @@ int main(int, char**)
     ImGui_ImplSDLRenderer_Shutdown();
     ImGui_ImplSDL2_Shutdown();
     ImGui::DestroyContext();
+
+    BASS_Free();
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);

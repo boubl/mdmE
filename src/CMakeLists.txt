@@ -6,10 +6,11 @@ add_executable(mdmE
     "bms.cpp"
     "ui.cpp"
     "IconsFontAwesome5.h"
-)
+ "kit.cpp" "editor.cpp" "data.cpp" "settings.cpp" "logs.cpp")
 
-#add imgui
+# add thirdparty libs
 target_sources(mdmE PRIVATE
+    # imgui
     "../include/imgui/imgui_demo.cpp"
     "../include/imgui/imgui_draw.cpp"
     "../include/imgui/imgui_tables.cpp"
@@ -20,9 +21,9 @@ target_sources(mdmE PRIVATE
     "../include/imgui/misc/cpp/imgui_stdlib.cpp"
     # imgui extension
     "../include/ImGuiFileDialog/ImGuiFileDialog.cpp"
+    # kuba's zip
+    "../include/zip/zip.c"
 )
 
 # external librairies
-target_link_libraries(mdmE PRIVATE SDL2::SDL2 SDL2::SDL2main)
-target_link_libraries(mdmE PRIVATE SDL2::SDL2_image)
-target_link_libraries(mdmE PRIVATE kubazip)
+target_link_libraries(mdmE PRIVATE SDL2 SDL2main SDL2_image bass)

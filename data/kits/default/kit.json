@@ -1,0 +1,183 @@
+{
+  "name": "Default Kit",
+  "version": "1.0",
+  "notes": {
+    "Small": {
+      "01": { "name": "Small (Normal)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+      "02": { "name": "Small (Up)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+      "03": { "name": "Small (Down)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+      "Small Bullet": {
+        "34": { "name": "Small Bullet (Normal)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+        "35": { "name": "Small Bullet (Up)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+        "36": { "name": "Small Bullet (Down)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+        "37": { "name": "Small Bullet (Laneshift)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] }
+      }
+    },
+    "Medium": {
+      "Medium 1": {
+        "04": { "name": "Medium 1 (Normal)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+        "05": { "name": "Medium 1 (Up)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+        "06": { "name": "Medium 1 (Down)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] }
+      },
+      "Medium 2": {
+        "07": { "name": "Medium 2 (Normal)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+        "08": { "name": "Medium 2 (Up)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+        "09": { "name": "Medium 2 (Down)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] }
+      },
+      "Medium Bullet": {
+        "30": { "name": "Medium Bullet (Normal)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+        "31": { "name": "Medium Bullet (Up)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+        "32": { "name": "Medium Bullet (Down)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+        "33": { "name": "Medium Bullet (Laneshift)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] }
+      }
+    },
+    "Large": {
+      "0A": { "name": "Large 1", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+      "0B": { "name": "Large 2", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+      "Large Bullet": {
+        "38": { "name": "Large Bullet (Normal)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+        "39": { "name": "Large Bullet (Up)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+        "3A": { "name": "Large Bullet (Down)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+        "3B": { "name": "Large Bullet (Laneshift)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] }
+      }
+    },
+    "0C": { "name": "Raider", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+    "0D": { "name": "Hammer", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+    "0E": { "name": "Gemini", "type": 1, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+    "0F": { "name": "Hold", "type": 2, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+    "0G": { "name": "Masher", "type": 2, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+    "0H": { "name": "Gear", "type": 0, "sound": true, "sprite": true, "channels": ["14", "54"] },
+    "Boss": {
+      "Boss Melee": {
+        "11": { "name": "Boss Melee 1", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+        "12": { "name": "Boss Melee 2", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] }
+      },
+      "Boss Projectile": {
+        "13": { "name": "Boss Projectile 1", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+        "14": { "name": "Boss Projectile 2", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+        "15": { "name": "Boss Projectile 3", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] }
+      },
+      "Boss Masher": {
+        "16": { "name": "Boss Masher 1", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+        "17": { "name": "Boss Masher 2", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] }
+      },
+      "18": { "name": "Boss Gear", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+      "Boss Bullet": {
+        "3C": { "name": "Boss Bullet (Normal)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+        "3D": { "name": "Boss Bullet (Up)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+        "3E": { "name": "Boss Bullet (Down)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+        "3F": { "name": "Boss Bullet (Laneshift)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] }
+      }
+    },
+    "20": { "name": "P Item", "type": 2, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+    "21": { "name": "Ghost", "type": 2, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+    "22": { "name": "Heart", "type": 2, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+    "23": { "name": "Note", "type": 2, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] }
+  },
+  "events": {
+    "Speed": {
+      "Speed 1": {
+        "0O": { "name": "Speed 1 (Both)", "color": "#ffffff" },
+        "0R": { "name": "Speed 1 (Low)", "color": "#ffffff" },
+        "0U": { "name": "Speed 1 (High)", "color": "#ffffff" }
+      },
+      "Speed 2": {
+        "0P": { "name": "Speed 2 (Both)", "color": "#ffffff" },
+        "0S": { "name": "Speed 2 (Low)", "color": "#ffffff" },
+        "0V": { "name": "Speed 2 (High)", "color": "#ffffff" }
+      },
+      "Speed 3": {
+        "0Q": { "name": "Speed 3 (Both)", "color": "#ffffff" },
+        "0T": { "name": "Speed 3 (Low)", "color": "#ffffff" },
+        "0W": { "name": "Speed 3 (High)", "color": "#ffffff" }
+      }
+    },
+    "Boss": {
+      "1A": { "name": "Boss Entrance", "color": "#ffffff" },
+      "1B": { "name": "Boss Exit", "color": "#ffffff" },
+      "Boss Ready Phase": {
+        "1C": { "name": "Boss Ready Phase 1", "color": "#ffffff" },
+        "1E": { "name": "Boss Ready Phase 1", "color": "#ffffff" }
+      },
+      "Boss End Phase": {
+        "1D": { "name": "Boss End Phase 1", "color": "#ffffff" },
+        "1F": { "name": "Boss End Phase 2", "color": "#ffffff" }
+      },
+      "Boss Swap Phase": {
+        "1G": { "name": "Boss Swap Phase 1->2", "color": "#ffffff" },
+        "1H": { "name": "Boss Swap Phase 2->1", "color": "#ffffff" }
+      }
+    },
+    "Hide": {
+      "1J": { "name": "Hide Notes", "color": "#ffffff" },
+      "1L": { "name": "Hide Boss", "color": "#ffffff" },
+      "25": { "name": "Hide Background", "color": "#ffffff" }
+    },
+    "Unhide": {
+      "1K": { "name": "Unhide Notes", "color": "#ffffff" },
+      "1M": { "name": "Unhide Boss", "color": "#ffffff" },
+      "26": { "name": "Unhide Background", "color": "#ffffff" }
+    },
+    "Scene Switch": {
+      "1O": { "name": "Scene Switch (Space Station)", "color": "#ffffff" },
+      "1P": { "name": "Scene Switch (Retrocity)", "color": "#ffffff" },
+      "1Q": { "name": "Scene Switch (Castle)", "color": "#ffffff" },
+      "1R": { "name": "Scene Switch (Rainy Night)", "color": "#ffffff" },
+      "1S": { "name": "Scene Switch (Candyland)", "color": "#ffffff" },
+      "1T": { "name": "Scene Switch (Oriental)", "color": "#ffffff" },
+      "1U": { "name": "Scene Switch (Groove Coaster)", "color": "#ffffff" },
+      "1V": { "name": "Scene Switch (Touhou)", "color": "#ffffff" },
+      "1W": { "name": "Scene Switch (DJMAX)", "color": "#ffffff" }
+    },
+    "Screen Scroll": {
+      "27": { "name": "Screen Scroll (Up)", "color": "#ffffff" },
+      "28": { "name": "Screen Scroll (Down)", "color": "#ffffff" },
+      "29": { "name": "Screen Scroll (Off)", "color": "#ffffff" }
+    },
+    "Scanline Ripples": {
+      "2A": { "name": "Scanline Ripples (On)", "color": "#ffffff" },
+      "2B": { "name": "Scanline Ripples (Off)", "color": "#ffffff" }
+    },
+    "Chromatic Aberration": {
+      "2C": { "name": "Chromatic Aberration (On)", "color": "#ffffff" },
+      "2D": { "name": "Chromatic Aberration (Off)", "color": "#ffffff" }
+    },
+    "Vignette": {
+      "2E": { "name": "Vignette (On)", "color": "#ffffff" },
+      "2F": { "name": "Vignette (Off)", "color": "#ffffff" }
+    },
+    "TV static": {
+      "2G": { "name": "TV static (On)", "color": "#ffffff" },
+      "2H": { "name": "TV static (Off)", "color": "#ffffff" }
+    },
+    "Flashbang": {
+      "2I": { "name": "Flashbang (START)", "color": "#ffffff" },
+      "2J": { "name": "Flashbang (MID)", "color": "#ffffff" },
+      "2K": { "name": "Flashbang (END)", "color": "#ffffff" }
+    },
+    "BG Stop": {
+      "2N": { "name": "BG Stop (START)", "color": "#ffffff" },
+      "2O": { "name": "BG Stop (END)", "color": "#ffffff" }
+    }
+  },
+  "channels": {
+    "02": { "name": "Beat per measure", "type": 3 },
+    "03": { "name": "BPM", "type": 2 },
+    "13": { "name": "Upper", "type": 0 },
+    "14": { "name": "Lower", "type": 0 },
+    "15": { "name": "Events", "type": 1 },
+    "53": { "name": "Upper2", "type": 0 },
+    "54": { "name": "Lower2", "type": 0 }
+  },
+  "scenes": {
+    "scene_01": "Space Station",
+    "scene_02": "Retrocity",
+    "scene_03": "Castle",
+    "scene_04": "Rainy Night",
+    "scene_05": "Candyland",
+    "scene_06": "Oriental",
+    "scene_07": "Let's Groove",
+    "scene_08": "Touhou",
+    "scene_09": "DJMAX"
+  }
+}
