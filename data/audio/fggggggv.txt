@@ -1,0 +1,6 @@
+get circular cover:
+draw it with color 255, 255, 255, 0
+on a texture of same size, draw a filled circle with color 0, 0, 0, 255
+set blending mode to add
+draw cirle on cover
+save result

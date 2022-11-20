@@ -1,10 +1,15 @@
 #include "editor.h"
 #include "ui.h"
 #include "data.h"
-#include <map>
-using namespace BMS;
+#include "chaneditor.h"
+#include "kit.h"
+#include "audio.h"
 
-int WorldToScreen(float fWorld, float span, float zoom) {
+Editor Editor::instance;
+string Editor::selectednote;
+int Editor::beatsnap;
+
+int WorldToSScreen(float fWorld, float span, float zoom) {
 	return (int)((fWorld - span) * zoom);
 }
 
@@ -12,116 +17,167 @@ float ScreenToWorld(int nScreen, float span, float zoom) {
 	return ((float)nScreen / zoom) + span;
 }
 
-Editor::Editor(SDL_Renderer* drenderer, BMS::MDMFile* dfile) :
-	renderer(drenderer),
-	file(dfile),
-	layers(vector<int>()),
-	vSpan(0),
-	vZoom(0),
-	hSpan(0),
-	hZoom(100),
-	nextwindowX(0),
-	nextwindowY(0),
-	nextwindowW(0),
-	nextwindowH(0)
-{
+Editor::Editor() {}
 
+Editor::Editor(SDL_Renderer* rrenderer)
+{
+	renderer = rrenderer;
+	rank = 1;
+
+	//ugly code, i'll remove it later
+	channels = vector<ChanEditor*>();
+	//channels.push_back(new ChanEditor("Beat per measure", "02", renderer));
+	//channels.push_back(new ChanEditor("BPM", "03", renderer));
+	channels.push_back(new ChanEditor("Upper", "13", renderer));
+	channels.push_back(new ChanEditor("Upper 2", "53", renderer));
+	channels.push_back(new ChanEditor("Lower", "14", renderer));
+	channels.push_back(new ChanEditor("Lower 2", "54", renderer));
+	channels.push_back(new ChanEditor("Events", "15", renderer));
 }
 
-void Editor::Begin()
-{
-	nextwindowX = ui::MainLayout::SideBarWidth;
-	nextwindowY = ui::MainLayout::TopBarHeight;
-	nextwindowW = (int)ImGui::GetIO().DisplaySize.x - nextwindowX;
-	nextwindowH = (int)ImGui::GetIO().DisplaySize.y - nextwindowY;
+bool Editor::Init(SDL_Renderer* renderer) {
+	instance.renderer = renderer;
+	instance.rank = 1;
+	instance.beatsnap = 1;
+
+	//ugly code, i'll remove it later
+	instance.channels = vector<ChanEditor*>();
+	//channels.push_back(new ChanEditor("Beat per measure", "02", renderer));
+	//channels.push_back(new ChanEditor("BPM", "03", renderer));
+	instance.channels.push_back(new ChanEditor("Upper", "13", renderer));
+	instance.channels.push_back(new ChanEditor("Upper 2", "53", renderer));
+	instance.channels.push_back(new ChanEditor("Lower", "14", renderer));
+	instance.channels.push_back(new ChanEditor("Lower 2", "54", renderer));
+	instance.channels.push_back(new ChanEditor("Events", "15", renderer));
+
+	return true;
 }
 
-int Editor::BeatCount(int rank) {
-	double length = BASS_ChannelBytes2Seconds(file->music, BASS_ChannelGetLength(file->music, BASS_POS_BYTE));
-	vector<MEASURE>* measures = &file->charts[rank];
-	float beatCount = 0;
-	int measureCount = 0;
-	while (beatCount * ((1 / file->bpm[rank]) * 60) < length) {
-		float beatsPM = 4;
-		if (measureCount < measures->size()) {
-			if (measures->at(measureCount).find("02") != measures->at(measureCount).end()) {
-				beatsPM *= stof(measures->at(measureCount).at("02")[0]);
-			}
-		}
-		beatCount += beatsPM;
-		measureCount++;
-	}
-	return beatCount;
-}
-
-void Editor::DisplayBeatLayer(int rank)
+void Editor::DisplayChannels()
 {
-	double length = BASS_ChannelBytes2Seconds(file->music, BASS_ChannelGetLength(file->music, BASS_POS_BYTE));
-	vector<MEASURE>* measures = &file->charts[rank];
-	float beatCount = BeatCount(rank);
-	//Create uninitialized texture
-	SDL_Texture* texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, nextwindowW, nextwindowH);
-	if (texture == NULL)
-	{
-		printf("Unable to create blank texture! SDL Error: %s\n", SDL_GetError());
-	}
-	SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
+	float beatpos = GetBeatPos();
 
-	SDL_SetRenderTarget(renderer, texture);
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
-	SDL_RenderClear(renderer);
-	
-	float lastPos = 0;
-	float span = hSpan * beatCount;
-	int measureCount = 0;
-	while (lastPos * ((1 / file->bpm[rank])*60) < length) {
-		float beatsPM = 4; // not bpm
-		if (measureCount < measures->size()) {
-			if (measures->at(measureCount).find("02") != measures->at(measureCount).end()) {
-				beatsPM *= stof(measures->at(measureCount).at("02")[0]);
-			}
-		}
-		lastPos += beatsPM;
-		int pos = WorldToScreen(lastPos, span, hZoom);
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-		SDL_RenderDrawLine(renderer, pos + (nextwindowW / 2), 0, pos + (nextwindowW / 2), 300);
+	// offset of the editor (and so the cursor)
+	float span = ScreenToWorld(ChanEditor::f_w / 4.f, 0, ChanEditor::f_zoom);
+	//apply offset and  set the span to cursor pos
+	ChanEditor::f_span = beatpos - span;
+	int pos = WorldToSScreen(beatpos, ChanEditor::f_span, ChanEditor::f_zoom);
 
-		if (measureCount < measures->size()) {
-			for (auto chan = measures->at(measureCount).begin(); chan != measures->at(measureCount).end(); chan++) {
-				for (auto kit = Data::kits.begin(); kit != Data::kits.end(); kit++) {
-					
-				}
+	bool is_first = true;
+	for (auto chanit = instance.channels.begin(); chanit != instance.channels.end(); chanit++) {
+		ChanEditor& chan = *(*chanit);
+
+		chan.Begin(is_first);
+		float beatcounter = 0;
+
+		for (int i_measure = 0; i_measure < Data::file->charts[instance.rank].size(); i_measure++) {
+			int time_sign = 4;
+
+			// get number of beat per measure
+			if (Data::file->charts[instance.rank][i_measure].find("02") != Data::file->charts[instance.rank][i_measure].end()) {
+				// todo: handle time signature multiplier of zero (cancel it)
+				if (Data::file->charts[instance.rank][i_measure]["02"].size() > 0)
+					time_sign *= strtof(Data::file->charts[instance.rank][i_measure]["02"][0].c_str(), NULL);
 			}
 
-			if (measures->at(measureCount).find("13") != measures->at(measureCount).end()) {
-				CHANNEL* chan = &measures->at(measureCount).at("13");
-				float basepos = lastPos - beatsPM;
-				float incpos = beatsPM / chan->size();
-				for (int i = 0; i < chan->size(); i++) {
-					int subpos = WorldToScreen(basepos + incpos * i, span, hZoom);
-					SDL_SetRenderDrawColor(renderer, 255, 255, 255, 200);
-					if (chan->at(i) != "00") {
-						SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-						SDL_Rect rect = SDL_Rect();
-						rect.x = (WorldToScreen((basepos + incpos * i), span, hZoom) - 5) + (nextwindowW / 2);
-						rect.y = (300 / 4) - 5;
-						rect.w = 10;
-						rect.h = 10;
-						SDL_RenderFillRect(renderer, &rect);
+			// handle bpm changes
+			// use of is_first because we just want to calculate it once (not for each channel)
+			float lastbpmchange = 0;
+			if (is_first && Data::file->charts[instance.rank][i_measure].find("03") != Data::file->charts[instance.rank][i_measure].end()) {
+				vector<string>& notes = Data::file->charts[instance.rank][i_measure]["03"];
+
+				if (notes.size() > 0) {
+					float incbeat = (float)time_sign / (float)notes.size();
+					for (auto note = notes.begin(); note != notes.end(); note++) {
+						if (*note != "00") {
+							instance.bpmchanges.insert({ beatcounter - lastbpmchange, stoi(*note, nullptr, 16) });
+							lastbpmchange = beatcounter;
+						}
+						beatcounter += incbeat;
 					}
 				}
+				else {
+					beatcounter += time_sign;
+				}
 			}
+			else {
+				beatcounter += time_sign;
+			}
+
+			chan.DrawMeasure(Data::file->charts[instance.rank][i_measure][chan.m_channelIds[0]], chan.m_channelIds[0], time_sign);
+
 		}
 
-		measureCount++;
+		is_first = false;
+
+		chan.End(instance.rank);
 	}
 
-	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 127);
 
-	SDL_RenderDrawLine(renderer, nextwindowW / 2, 0, nextwindowW / 2, 300);
+	// cursor display
+	SDL_SetRenderDrawColor(instance.renderer, 255, 0, 0, 255);
+	SDL_RenderDrawLine(instance.renderer, pos + ChanEditor::f_x, ui::MainLayout::TopBarHeight, pos + ChanEditor::f_x, ui::MainLayout::TopBarHeight + ChanEditor::f_h * instance.channels.size());
+}
 
-	SDL_SetRenderTarget(renderer, NULL);
-	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-	SDL_RenderCopy(renderer, texture, new SDL_Rect({ 0, 0, nextwindowW, nextwindowH }), new SDL_Rect({ nextwindowX, nextwindowY, nextwindowW, nextwindowH }));
-	SDL_DestroyTexture(texture);
+void Editor::ReloadBPMChanges() {
+	float beatcounter = 0;
+	float timepos = BASS_ChannelBytes2Seconds(Data::file->music, BASS_ChannelGetPosition(Data::file->music, BASS_POS_BYTE)) / 60.0f;
+
+	for (int i_measure = 0; i_measure < Data::file->charts[instance.rank].size(); i_measure++) {
+		int time_sign = 4;
+
+		if (Data::file->charts[instance.rank][i_measure].find("02") != Data::file->charts[instance.rank][i_measure].end()) {
+			// todo: handle time signature multiplier of zero (cancel it)
+			if (Data::file->charts[instance.rank][i_measure]["02"].size() > 0)
+				time_sign *= strtof(Data::file->charts[instance.rank][i_measure]["02"][0].c_str(), NULL);
+		}
+
+		float lastbpmchange = 0;
+		// channel 03 = bpm changes
+		if (Data::file->charts[instance.rank][i_measure].find("03") != Data::file->charts[instance.rank][i_measure].end() && Data::file->charts[instance.rank][i_measure]["03"].size() > 0) {
+			vector<string>& notes = Data::file->charts[instance.rank][i_measure]["03"];
+			float incbeat = (float)time_sign / (float)notes.size();
+			for (auto note = notes.begin(); note != notes.end(); note++) {
+				if (*note != "00") {
+					instance.bpmchanges.insert({ beatcounter - lastbpmchange, stoi(*note, nullptr, 16) });
+					lastbpmchange = beatcounter;
+				}
+				beatcounter += incbeat;
+			}
+		}
+		else {
+			beatcounter += time_sign;
+		}
+	}
+}
+
+float Editor::GetBeatPos() {
+	float timepos = Audio::GetSongPos() / 60.f;
+	float bpm = Data::file->bpm[instance.rank];
+
+	// this took me 1h30 to make this code functional. i'll never touch it again. fuck bpm changes 
+	float beatpos = 0;
+	float decount = 0;
+	for (auto change = instance.bpmchanges.begin(); change != instance.bpmchanges.end(); change++) {
+		if (timepos > decount + (change->first - beatpos) / bpm) {
+			decount += (change->first - beatpos) / bpm;
+			beatpos = change->first;
+			bpm = change->second;
+		}
+	}
+	beatpos += (timepos - decount) * bpm;
+
+	return beatpos;
+}
+
+//return -1 if none
+int Editor::GetSnapedBeat() {
+	ImVec2 mousepos = ImGui::GetMousePos();
+	return -1;
+}
+
+//return -1 if no channel
+int Editor::GetHoveredChannel() {
+	ImVec2 mousepos = ImGui::GetMousePos();
+	return -1;
 }

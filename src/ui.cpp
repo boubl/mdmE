@@ -1,4 +1,5 @@
 #include "ui.h"
+#include "audio.h"
 #include "data.h"
 #include <math.h>
 
@@ -8,34 +9,78 @@ namespace ui {
 
 	void MainLayout::ChartInfo() {
 		if (ImGui::Begin("Chart info", &showChartInfo)) {
-			ImGui::InputText("Name", &file->name);
-			ImGui::InputText("Author", &file->author);
-			ImGui::InputText("BPM", &file->bpmInfo);
+			ImGui::Text("General:");
+			ImGui::InputText("Song title", &file->name);
+			ImGui::InputText("Song Author", &file->author);
+			ImGui::InputText("BPM description", &file->bpmInfo);
+
+			ImGui::InputFloat("BPM", &file->bpm[1]);
+			string preview = file->scene[1]; // set the preview to the id if not found in kits
+			if (Kit::allscenes.find(file->scene[1]) != Kit::allscenes.end())
+				preview = Kit::allscenes[file->scene[1]];
+			if (ImGui::BeginCombo("Scene", preview.c_str(), 0))
+			{
+				for (auto scene = Kit::allscenes.begin(); scene != Kit::allscenes.end(); scene++)
+				{
+					const bool is_selected = (file->scene[1] == scene->first);
+					if (ImGui::Selectable(scene->second.c_str(), is_selected))
+						file->scene[1] = scene->first;
+
+					// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+					if (is_selected)
+						ImGui::SetItemDefaultFocus();
+				}
+				ImGui::EndCombo();
+			}
+			ImGui::InputText("Designer", &file->designers[1]);
+			ImGui::InputInt("Star difficulty", &file->difficulties[1]);
+
 			ImGui::End();
 		}
 	}
 
+	static bool musicwasplaying = false;
+	static bool sliderwasclicked = false;
 	void MainLayout::DrawMainBar() {
 		if (ImGui::BeginMainMenuBar()) {
 			if (ImGui::BeginMenu("File")) {
+				char const* lFilterPatterns[1] = { "*.mdm", };
 				if (ImGui::MenuItem("New...", "Ctrl+N")) {
 					savedPath = "";
+					file->~MDMFile();
 					*file = BMS::MDMFile();
 				}
-				if (ImGui::MenuItem("Open...", "Ctrl+O"))
-					ImGuiFileDialog::Instance()->OpenDialog("OpenFileDlgKey", "Open...", ".mdm", ".");
+				if (ImGui::MenuItem("Open...", "Ctrl+O")) {
+					char* result = tinyfd_openFileDialog("Open...", NULL, 1, lFilterPatterns, "MuseDash map file", 0);
+					if (result != NULL) {
+						savedPath = result;
+						file->Load(savedPath);
+					}
+				}
 				if (ImGui::BeginMenu("Open recent")) {
+					ImGui::TextDisabled("No recent files");
 					ImGui::EndMenu();
 				}
 				ImGui::Separator();
 				if (ImGui::MenuItem("Save", "Ctrl+S")) {
-					if (savedPath == "")
-						ImGuiFileDialog::Instance()->OpenDialog("SaveFileDlgKey", "Save", ".mdm", ".");
+					if (savedPath == "") {
+						char* result = tinyfd_saveFileDialog("Save", NULL, 1, lFilterPatterns, "MuseDash map file");
+						if (result != NULL) {
+							savedPath = result;
+							file->Load(savedPath);
+						}
+					}
 					else
 						file->Save(savedPath);
 				}
-				if (ImGui::MenuItem("Save as...", "Ctrl+S"))
-					ImGuiFileDialog::Instance()->OpenDialog("SaveFileDlgKey", "Save as...", ".mdm", ".");
+				if (ImGui::MenuItem("Save as...", "Ctrl+S")) {
+					char* result = tinyfd_saveFileDialog("Save as...", NULL, 1, lFilterPatterns, "MuseDash map file");
+					if (result != NULL) {
+						savedPath = result;
+						file->Load(savedPath);
+					}
+				}
+
 				ImGui::EndMenu();
 			}
 			if (ImGui::BeginMenu("Edit")) {
@@ -58,7 +103,8 @@ namespace ui {
 					showDemo = true;
 				if (ImGui::MenuItem("Kits"))
 					showKits = true;
-				ImGui::MenuItem("FABIO", "Lanzoni");
+				if (ImGui::MenuItem("FABIO", "Lanzoni"))
+					SDL_OpenURL("https://realboubli.github.io/");
 				ImGui::EndMenu();
 			}
 			ImGui::Separator();
@@ -68,15 +114,16 @@ namespace ui {
 			}
 			if (ImGui::MenuItem(ICON_FA_PLAY)) {
 				BASS_ChannelPlay(file->music, false);
+				cout << BASS_ErrorGetCode() << endl;
 			}
 			if (ImGui::MenuItem(ICON_FA_PAUSE)) {
 				BASS_ChannelPause(file->music);
 			}
-			// Who would use this?
-			//if (ImGui::MenuItem(ICON_FA_FAST_FORWARD)) {
-			//	BASS_ChannelPause(file->music);
-			//	BASS_ChannelSetPosition(file->music, BASS_ChannelGetLength(file->music, BASS_POS_BYTE), BASS_POS_BYTE);
-			//}
+			if (ImGui::MenuItem(ICON_FA_FAST_FORWARD)) {
+				BASS_ChannelPause(file->music);
+				BASS_ChannelSetPosition(file->music, BASS_ChannelGetLength(file->music, BASS_POS_BYTE), BASS_POS_BYTE);
+			}
+
 			BASS_CHANNELINFO info;
 			string curPos = "--:--";
 			string endPos = " --:--";// the space is not a typo, it's for the minus (should i remove the minus?)
@@ -91,15 +138,25 @@ namespace ui {
 			ImGui::PopFont();
 
 			nextPos = { 0, ImGui::GetWindowPos().y + ImGui::GetWindowSize().y };
-			TopBarHeight = ImGui::GetWindowSize().y;
-			float before = editor->hSpan;
-			ImGui::SliderFloat("", &editor->hSpan, 0, 1, "");
-			double length = BASS_ChannelBytes2Seconds(file->music, BASS_ChannelGetLength(file->music, BASS_POS_BYTE));
-			if (editor->hSpan != before) {
-				BASS_ChannelPause(file->music);
-				BASS_ChannelSetPosition(file->music, BASS_ChannelSeconds2Bytes(file->music, editor->hSpan * length), BASS_POS_BYTE);
+			TopBarHeight = (int)ImGui::GetWindowSize().y;
+
+			// normalized song position
+			float normalpos = Audio::GetSongPos() / Audio::GetSongLength();
+			ImGui::SliderFloat("##SongSlider", &normalpos, 0, 1, "");
+			// the second condition is to fix a bug where sometimes ImGui will not detect the slider editing state correctly
+			if (ImGui::IsItemEdited() || (sliderwasclicked && ImGui::IsMouseDown(ImGuiMouseButton_Left))) {
+				if (!sliderwasclicked)
+					musicwasplaying = Audio::IsSongPlaying();
+				sliderwasclicked = true;
+				Audio::SetSongPos(normalpos * Audio::GetSongLength());
+				Audio::PauseSong();
 			}
-			editor->hSpan = BASS_ChannelBytes2Seconds(file->music, BASS_ChannelGetPosition(file->music, BASS_POS_BYTE)) / length;
+			else {
+				if (sliderwasclicked && musicwasplaying) {
+					Audio::PlaySong();
+				}
+				sliderwasclicked = false;
+			}
 
 			ImGui::EndMainMenuBar();
 		}
@@ -112,7 +169,7 @@ namespace ui {
 			ImGui::Button(ICON_FA_ERASER);
 			ImGui::Button(ICON_FA_EXPAND);
 			ImGui::Button(ICON_FA_VOLUME_MUTE);
-			SideBarWidth = ImGui::GetWindowSize().x;
+			SideBarWidth = (int)ImGui::GetWindowSize().x;
 			nextPos = { 0, ImGui::GetWindowPos().y + ImGui::GetWindowSize().y };
 			nextSize = ImGui::GetWindowSize().x;
 			ImGui::End();
@@ -123,63 +180,29 @@ namespace ui {
 		ImGui::SetNextWindowPos(nextPos);
 		ImGui::SetNextWindowSize(ImVec2({ nextSize, ImGui::GetIO().DisplaySize.y - nextPos.y }));
 		if (ImGui::Begin("Notes", 0, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize)) {
-			ImGui::Button("Small");
-			ImGui::Button("A");
-			ImGui::Button("BBB");
-			ImGui::Button("prout");
-			ImGui::Button("Small");
-			ImGui::Button("A");
-			ImGui::Button("BBB");
-			ImGui::Button("prout");
-			ImGui::Button("Small");
-			ImGui::Button("A");
-			ImGui::Button("BBB");
-			ImGui::Button("prout");
-			ImGui::Button("Small");
-			ImGui::Button("A");
-			ImGui::Button("BBB");
-			ImGui::Button("prout");
-			ImGui::Button("Small");
-			ImGui::Button("A");
-			ImGui::Button("BBB");
-			ImGui::Button("prout");
-			ImGui::Button("Small");
-			ImGui::Button("A");
-			ImGui::Button("BBB");
-			ImGui::Button("prout");
-			ImGui::Button("Small");
-			ImGui::Button("A");
-			ImGui::Button("BBB");
-			ImGui::Button("prout");
-			ImGui::Button("Small");
-			ImGui::Button("A");
-			ImGui::Button("BBB");
-			ImGui::Button("prout");
-			ImGui::End();
-		}
-	}
-
-	void MainLayout::DisplayFileDialogs() {
-
-		if (ImGuiFileDialog::Instance()->Display("OpenFileDlgKey"))
-		{
-			if (ImGuiFileDialog::Instance()->IsOk())
-			{
-				savedPath = ImGuiFileDialog::Instance()->GetFilePathName();
-				file->Load(savedPath);
+			for (auto note = Kit::allnotes.begin(); note != Kit::allnotes.end(); note++) {
+				if (note->first == Editor::selectednote) {
+					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(66.f / 255.f, 150.f / 250.f, 250.f / 255.f, 1.f));
+					if (ImGui::Button(note->first.c_str()))
+						Audio::PlaySingleSFX(note->second->sound);
+					ImGui::PopStyleColor();
+				}
+				else {
+					if (ImGui::Button(note->first.c_str())) {
+						Editor::selectednote = note->first;
+						Audio::PlaySingleSFX(note->second->sound);
+					}
+				}
+				if (ImGui::IsItemHovered()) {
+					ImGui::BeginTooltip();
+					ImGui::Text(note->second->name.c_str());
+					if (!note->second->sound.empty())
+						ImGui::TextDisabled(note->second->sound.c_str());
+					ImGui::EndTooltip();
+				}
 			}
-			ImGuiFileDialog::Instance()->Close();
 		}
-
-		if (ImGuiFileDialog::Instance()->Display("SaveFileDlgKey"))
-		{
-			if (ImGuiFileDialog::Instance()->IsOk())
-			{
-				savedPath = ImGuiFileDialog::Instance()->GetFilePathName();
-				file->Save(savedPath);
-			}
-			ImGuiFileDialog::Instance()->Close();
-		}
+		ImGui::End();
 	}
 
 	void MainLayout::Preferences() {
@@ -188,19 +211,24 @@ namespace ui {
 			BASS_ChannelGetAttribute(file->music, BASS_ATTRIB_VOL, &volume);
 			ImGui::SliderFloat(((string)ICON_FA_PLAY + "Music Volume").c_str(), &volume, 0, 1, NULL, ImGuiSliderFlags_None);
 			BASS_ChannelSetAttribute(file->music, BASS_ATTRIB_VOL, volume);
-			ImGui::End();
 		}
+		ImGui::End();
 	}
 
 	void MainLayout::EditEditorView()
 	{
 		if (ImGui::Begin("Edit Editor View", &showEditEditorView)) {
-			ImGui::InputFloat("H Zoom", &editor->hZoom);
-			ImGui::InputFloat("V Zoom", &editor->vZoom);
-			ImGui::InputFloat("H Span", &editor->hSpan);
-			ImGui::InputFloat("V Span", &editor->vSpan);
-			ImGui::End();
+			int span = ChanEditor::f_span;
+			ImGui::InputInt("Span", &span);
+			ChanEditor::f_span = span;
+			int w_zoom = ChanEditor::f_zoom;
+			ImGui::InputInt("W Zoom", &w_zoom);
+			ChanEditor::f_zoom = w_zoom;
+			int h_zoom = ChanEditor::f_h;
+			ImGui::InputInt("H Zoom", &h_zoom);
+			ChanEditor::f_h = h_zoom;
 		}
+		ImGui::End();
 	}
 
 	void MainLayout::Kits() {
@@ -222,7 +250,7 @@ namespace ui {
 
 				// Demonstrate using clipper for large vertical lists
 				ImGuiListClipper clipper;
-				clipper.Begin(Data::kits.size());
+				clipper.Begin((int)Data::kits.size());
 				while (clipper.Step())
 				{
 					for (int index = clipper.DisplayStart; index < clipper.DisplayEnd; index++)
@@ -230,14 +258,18 @@ namespace ui {
 						ImGui::TableNextRow();
 
 						ImGui::TableSetColumnIndex(0);
-						ImGui::Checkbox(("###Chckbx" + to_string(index)).c_str(), &Data::kits[index].activated);
+						if (ImGui::Checkbox(("###Chckbx" + to_string(index)).c_str(), &Data::kits[index].activated)) {
+							Data::ReloadKitsData();
+						}
 						ImGui::SameLine();
 						if (ImGui::Button((ICON_FA_ARROW_UP "###Up" + to_string(index)).c_str()) && index > 0) {
 							swap(Data::kits[index], Data::kits[index - 1]);
+							Data::ReloadKitsData();
 						}
 						ImGui::SameLine();
 						if (ImGui::Button((ICON_FA_ARROW_DOWN "###Down" + to_string(index)).c_str()) && index < Data::kits.size() - 1) {
 							swap(Data::kits[index], Data::kits[index + 1]);
+							Data::ReloadKitsData();
 						}
 						ImGui::TableSetColumnIndex(1);
 						ImGui::Text(Data::kits[index].name.c_str());
@@ -247,14 +279,12 @@ namespace ui {
 				}
 				ImGui::EndTable();
 			}
-
-			ImGui::End();
 		}
+		ImGui::End();
 	}
 
-	MainLayout::MainLayout(BMS::MDMFile* mdmfile, Editor* editorInstance) :
+	MainLayout::MainLayout(BMS::MDMFile* mdmfile) :
 		file(mdmfile),
-		editor(editorInstance),
 		nextSize(0),
 		nextPos({0, 0}),
 		savedPath(""),
@@ -271,7 +301,6 @@ namespace ui {
 		DrawMainBar();
 		DrawToolBar();
 		DrawNotesBar();
-		DisplayFileDialogs();
 		//windows
 		if (showChartInfo)
 			ChartInfo();

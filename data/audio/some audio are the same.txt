@@ -1,0 +1,39 @@
+Gear sound:
+Boss Gear
+Gear
+
+Common sound:
+Boss charge
+Boss Hit
+Boss projectile 1 2 3
+Gemini
+Masher (and Boss Masher)
+Medium (all)
+Small (all)
+
+Large 2 sound:
+Boss Melee 1 2
+Large 2
+
+Ghost sound:
+Sound
+
+Hammer sound:
+Hammer
+
+Hearts sound:
+Heart
+
+Note sound:
+Note
+P Item (i guess?)
+
+Hitting Nothing sound:
+Hitting Nothing
+
+Hold sound:
+Hold
+
+Large 1 sound:
+Large 1
+Raider

@@ -3,76 +3,360 @@
   "version": "1.0",
   "notes": {
     "Small": {
-      "01": { "name": "Small (Normal)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
-      "02": { "name": "Small (Up)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
-      "03": { "name": "Small (Down)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+      "01": {
+        "name": "Small (Normal)",
+        "type": 0,
+        "sound": "Common.wav",
+        "sprite": true,
+        "channels": [ "13", "14", "53", "54" ]
+      },
+      "02": {
+        "name": "Small (Up)",
+        "type": 0,
+        "sound": "Common.wav",
+        "sprite": true,
+        "channels": [ "13", "14", "53", "54" ]
+      },
+      "03": {
+        "name": "Small (Down)",
+        "type": 0,
+        "sound": "Common.wav",
+        "sprite": true,
+        "channels": [ "13", "14", "53", "54" ]
+      },
       "Small Bullet": {
-        "34": { "name": "Small Bullet (Normal)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
-        "35": { "name": "Small Bullet (Up)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
-        "36": { "name": "Small Bullet (Down)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
-        "37": { "name": "Small Bullet (Laneshift)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] }
+        "34": {
+          "name": "Small Bullet (Normal)",
+          "type": 0,
+          "sound": "",
+          "sprite": true,
+          "channels": [ "13", "14", "53", "54" ]
+        },
+        "35": {
+          "name": "Small Bullet (Up)",
+          "type": 0,
+          "sound": "",
+          "sprite": true,
+          "channels": [ "13", "14", "53", "54" ]
+        },
+        "36": {
+          "name": "Small Bullet (Down)",
+          "type": 0,
+          "sound": "",
+          "sprite": true,
+          "channels": [ "13", "14", "53", "54" ]
+        },
+        "37": {
+          "name": "Small Bullet (Laneshift)",
+          "type": 0,
+          "sound": "",
+          "sprite": true,
+          "channels": [ "13", "14", "53", "54" ]
+        }
       }
     },
     "Medium": {
       "Medium 1": {
-        "04": { "name": "Medium 1 (Normal)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
-        "05": { "name": "Medium 1 (Up)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
-        "06": { "name": "Medium 1 (Down)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] }
+        "04": {
+          "name": "Medium 1 (Normal)",
+          "type": 0,
+          "sound": "Common.wav",
+          "sprite": true,
+          "channels": [ "13", "14", "53", "54" ]
+        },
+        "05": {
+          "name": "Medium 1 (Up)",
+          "type": 0,
+          "sound": "Common.wav",
+          "sprite": true,
+          "channels": [ "13", "14", "53", "54" ]
+        },
+        "06": {
+          "name": "Medium 1 (Down)",
+          "type": 0,
+          "sound": "Common.wav",
+          "sprite": true,
+          "channels": [ "13", "14", "53", "54" ]
+        }
       },
       "Medium 2": {
-        "07": { "name": "Medium 2 (Normal)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
-        "08": { "name": "Medium 2 (Up)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
-        "09": { "name": "Medium 2 (Down)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] }
+        "07": {
+          "name": "Medium 2 (Normal)",
+          "type": 0,
+          "sound": "Common.wav",
+          "sprite": true,
+          "channels": [ "13", "14", "53", "54" ]
+        },
+        "08": {
+          "name": "Medium 2 (Up)",
+          "type": 0,
+          "sound": "Common.wav",
+          "sprite": true,
+          "channels": [ "13", "14", "53", "54" ]
+        },
+        "09": {
+          "name": "Medium 2 (Down)",
+          "type": 0,
+          "sound": "Common.wav",
+          "sprite": true,
+          "channels": [ "13", "14", "53", "54" ]
+        }
       },
       "Medium Bullet": {
-        "30": { "name": "Medium Bullet (Normal)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
-        "31": { "name": "Medium Bullet (Up)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
-        "32": { "name": "Medium Bullet (Down)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
-        "33": { "name": "Medium Bullet (Laneshift)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] }
+        "30": {
+          "name": "Medium Bullet (Normal)",
+          "type": 0,
+          "sound": "",
+          "sprite": true,
+          "channels": [ "13", "14", "53", "54" ]
+        },
+        "31": {
+          "name": "Medium Bullet (Up)",
+          "type": 0,
+          "sound": "",
+          "sprite": true,
+          "channels": [ "13", "14", "53", "54" ]
+        },
+        "32": {
+          "name": "Medium Bullet (Down)",
+          "type": 0,
+          "sound": "",
+          "sprite": true,
+          "channels": [ "13", "14", "53", "54" ]
+        },
+        "33": {
+          "name": "Medium Bullet (Laneshift)",
+          "type": 0,
+          "sound": "",
+          "sprite": true,
+          "channels": [ "13", "14", "53", "54" ]
+        }
       }
     },
     "Large": {
-      "0A": { "name": "Large 1", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
-      "0B": { "name": "Large 2", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+      "0A": {
+        "name": "Large 1",
+        "type": 0,
+        "sound": "Large 1.wav",
+        "sprite": true,
+        "channels": [ "13", "14", "53", "54" ]
+      },
+      "0B": {
+        "name": "Large 2",
+        "type": 0,
+        "sound": "Large 2.wav",
+        "sprite": true,
+        "channels": [ "13", "14", "53", "54" ]
+      },
       "Large Bullet": {
-        "38": { "name": "Large Bullet (Normal)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
-        "39": { "name": "Large Bullet (Up)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
-        "3A": { "name": "Large Bullet (Down)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
-        "3B": { "name": "Large Bullet (Laneshift)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] }
+        "38": {
+          "name": "Large Bullet (Normal)",
+          "type": 0,
+          "sound": "",
+          "sprite": true,
+          "channels": [ "13", "14", "53", "54" ]
+        },
+        "39": {
+          "name": "Large Bullet (Up)",
+          "type": 0,
+          "sound": "",
+          "sprite": true,
+          "channels": [ "13", "14", "53", "54" ]
+        },
+        "3A": {
+          "name": "Large Bullet (Down)",
+          "type": 0,
+          "sound": "",
+          "sprite": true,
+          "channels": [ "13", "14", "53", "54" ]
+        },
+        "3B": {
+          "name": "Large Bullet (Laneshift)",
+          "type": 0,
+          "sound": "",
+          "sprite": true,
+          "channels": [ "13", "14", "53", "54" ]
+        }
       }
     },
-    "0C": { "name": "Raider", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
-    "0D": { "name": "Hammer", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
-    "0E": { "name": "Gemini", "type": 1, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
-    "0F": { "name": "Hold", "type": 2, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
-    "0G": { "name": "Masher", "type": 2, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
-    "0H": { "name": "Gear", "type": 0, "sound": true, "sprite": true, "channels": ["14", "54"] },
+    "0C": {
+      "name": "Raider",
+      "type": 0,
+      "sound": "Large 1.wav",
+      "sprite": true,
+      "channels": [ "13", "14", "53", "54" ]
+    },
+    "0D": {
+      "name": "Hammer",
+      "type": 0,
+      "sound": "Hammer.wav",
+      "sprite": true,
+      "channels": [ "13", "14", "53", "54" ]
+    },
+    "0E": {
+      "name": "Gemini",
+      "type": 1,
+      "sound": "Common.wav",
+      "sprite": true,
+      "channels": [ "13", "14", "53", "54" ]
+    },
+    "0F": {
+      "name": "Hold",
+      "type": 2,
+      "sound": "Hold.wav",
+      "sprite": true,
+      "channels": [ "13", "14", "53", "54" ]
+    },
+    "0G": {
+      "name": "Masher",
+      "type": 2,
+      "sound": "Common.wav",
+      "sprite": true,
+      "channels": [ "13", "14", "53", "54" ]
+    },
+    "0H": {
+      "name": "Gear",
+      "type": 0,
+      "sound": "Gear.wav",
+      "sprite": true,
+      "channels": [ "14", "54" ]
+    },
+    "0I": {
+      "name": "Raider (Upside-down)",
+      "type": 0,
+      "sound": "Large 1.wav",
+      "sprite": true,
+      "channels": [ "13", "14", "53", "54" ]
+    },
+    "0J": {
+      "name": "Hammer (Upside-down)",
+      "type": 0,
+      "sound": "Hammer.wav",
+      "sprite": true,
+      "channels": [ "13", "14", "53", "54" ]
+    },
     "Boss": {
       "Boss Melee": {
-        "11": { "name": "Boss Melee 1", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
-        "12": { "name": "Boss Melee 2", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] }
+        "11": {
+          "name": "Boss Melee 1",
+          "type": 0,
+          "sound": "Large 2.wav",
+          "sprite": true,
+          "channels": [ "13", "14", "53", "54" ]
+        },
+        "12": {
+          "name": "Boss Melee 2",
+          "type": 0,
+          "sound": "Large 2.wav",
+          "sprite": true,
+          "channels": [ "13", "14", "53", "54" ]
+        }
       },
       "Boss Projectile": {
-        "13": { "name": "Boss Projectile 1", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
-        "14": { "name": "Boss Projectile 2", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
-        "15": { "name": "Boss Projectile 3", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] }
+        "13": {
+          "name": "Boss Projectile 1",
+          "type": 0,
+          "sound": "Common.wav",
+          "sprite": true,
+          "channels": [ "13", "14", "53", "54" ]
+        },
+        "14": {
+          "name": "Boss Projectile 2",
+          "type": 0,
+          "sound": "Common.wav",
+          "sprite": true,
+          "channels": [ "13", "14", "53", "54" ]
+        },
+        "15": {
+          "name": "Boss Projectile 3",
+          "type": 0,
+          "sound": "Common.wav",
+          "sprite": true,
+          "channels": [ "13", "14", "53", "54" ]
+        }
       },
       "Boss Masher": {
-        "16": { "name": "Boss Masher 1", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
-        "17": { "name": "Boss Masher 2", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] }
+        "16": {
+          "name": "Boss Masher 1",
+          "type": 0,
+          "sound": "Common.wav",
+          "sprite": true,
+          "channels": [ "13", "14", "53", "54" ]
+        },
+        "17": {
+          "name": "Boss Masher 2",
+          "type": 0,
+          "sound": "Common.wav",
+          "sprite": true,
+          "channels": [ "13", "14", "53", "54" ]
+        }
       },
-      "18": { "name": "Boss Gear", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
+      "18": {
+        "name": "Boss Gear",
+        "type": 0,
+        "sound": "Gear.wav",
+        "sprite": true,
+        "channels": [ "13", "14", "53", "54" ]
+      },
       "Boss Bullet": {
-        "3C": { "name": "Boss Bullet (Normal)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
-        "3D": { "name": "Boss Bullet (Up)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
-        "3E": { "name": "Boss Bullet (Down)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
-        "3F": { "name": "Boss Bullet (Laneshift)", "type": 0, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] }
+        "3C": {
+          "name": "Boss Bullet (Normal)",
+          "type": 0,
+          "sound": "",
+          "sprite": true,
+          "channels": [ "13", "14", "53", "54" ]
+        },
+        "3D": {
+          "name": "Boss Bullet (Up)",
+          "type": 0,
+          "sound": "",
+          "sprite": true,
+          "channels": [ "13", "14", "53", "54" ]
+        },
+        "3E": {
+          "name": "Boss Bullet (Down)",
+          "type": 0,
+          "sound": "",
+          "sprite": true,
+          "channels": [ "13", "14", "53", "54" ]
+        },
+        "3F": {
+          "name": "Boss Bullet (Laneshift)",
+          "type": 0,
+          "sound": "",
+          "sprite": true,
+          "channels": [ "13", "14", "53", "54" ]
+        }
       }
     },
-    "20": { "name": "P Item", "type": 2, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
-    "21": { "name": "Ghost", "type": 2, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
-    "22": { "name": "Heart", "type": 2, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] },
-    "23": { "name": "Note", "type": 2, "sound": true, "sprite": true, "channels": ["13", "14", "53", "54"] }
+    "20": {
+      "name": "P Item",
+      "type": 0,
+      "sound": "Note.wav",
+      "sprite": true,
+      "channels": [ "13", "14", "53", "54" ]
+    },
+    "21": {
+      "name": "Ghost",
+      "type": 0,
+      "sound": "Ghost.wav",
+      "sprite": true,
+      "channels": [ "13", "14", "53", "54" ]
+    },
+    "22": {
+      "name": "Heart",
+      "type": 0,
+      "sound": "Heart.wav",
+      "sprite": true,
+      "channels": [ "13", "14", "53", "54" ]
+    },
+    "23": {
+      "name": "Note",
+      "type": 0,
+      "sound": "Note.wav",
+      "sprite": true,
+      "channels": [ "13", "14", "53", "54" ]
+    }
   },
   "events": {
     "Speed": {
@@ -168,6 +452,13 @@
     "15": { "name": "Events", "type": 1 },
     "53": { "name": "Upper2", "type": 0 },
     "54": { "name": "Lower2", "type": 0 }
+  },
+  "channel_editors": {
+    "Beat per measure": { "channels": ["02"], "othervalueidk": 3 },
+    "BPM": { "channels": ["03"], "othervalueidk": 2 },
+    "Upper": { "channels": ["13", "53"], "othervalueidk": 0 },
+    "Lower": { "channels": ["14", "54"], "othervalueidk": 0 },
+    "Events": { "channels": ["15"], "othervalueidk": 1 }
   },
   "scenes": {
     "scene_01": "Space Station",

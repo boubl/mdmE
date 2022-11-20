@@ -17,8 +17,8 @@ class Note {
 public:
 	string name;
 	NoteType type;
-	bool sound;
-	bool sprite;
+	string sound;
+	string sprite;
 	vector<string> channels;
 
 	Note();
@@ -57,8 +57,15 @@ public:
 
 class Kit {
 public:
+	static map<string, Note*> allnotes;
+	static map<string, Event*> allevents;
+	static map<string, Channel*> allchannels;
+	static map<string, string> allscenes;
+
+public:
 	bool activated;
 
+	string dir;
 	string name;
 	string version;
 	NoteFolder notes;
@@ -66,16 +73,13 @@ public:
 	map<string, Channel> channels;
 	map<string, string> scenes;
 
-	map<string, Note> notesQA;
-	map<string, Event> eventsQA;
-
 	Kit();
 
-	bool LoadZip(string filepath);
+	bool LoadZip(string dirpath, string filename);
 	bool LoadDir(string dirpath);
 private:
-	bool LoadInfo(nlohmann::json* info);
-	void LoadNoteFolder(nlohmann::json* jfolder, NoteFolder* nfolder);
+	bool LoadInfo(nlohmann::json& info);
+	void LoadNoteFolder(nlohmann::json& jfolder, NoteFolder& nfolder);
 	void LoadEventFolder(nlohmann::json* jfolder, EventFolder* efolder);
 	void LoadChannels(nlohmann::json* jchans, map<string, Channel>* chans);
 };

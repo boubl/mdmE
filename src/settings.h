@@ -1,5 +1,0 @@
-namespace app {
-	class Settings {
-
-	};
-}

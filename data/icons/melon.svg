@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+  <polygon style="fill: rgb(254, 48, 183);" points="370.885 59.663 75.937 362.475 184.085 444.405 401.035 353.299 443.638 167.81"/>
+  <path style="stroke: rgb(2, 186, 197); stroke-width: 27px; fill: none;" d="M 379.364 71.371 C 544.212 302.254 257.468 519.628 83.576 380.513"/>
+  <path style="stroke-linecap: round; stroke: rgb(105, 0, 146); paint-order: fill; stroke-width: 54px; stroke-linejoin: round; fill: none;" d="M 272.707 138.222 L 386.922 28.743 C 639.193 301.157 242.052 607.982 40.382 390.209 L 154.597 260.225 C 208.907 256.378 264.738 199.991 272.707 138.222 Z"/>
+  <ellipse style="fill: rgb(113, 25, 148); stroke: rgb(113, 25, 148); stroke-width: 5px;" cx="170.648" cy="348.383" rx="12.126" ry="12.126"/>
+  <ellipse style="fill: rgb(113, 25, 148); stroke: rgb(113, 25, 148); stroke-width: 5px;" cx="250" cy="288" rx="12.126" ry="12.126"/>
+  <ellipse style="fill: rgb(113, 25, 148); stroke: rgb(113, 25, 148); stroke-width: 5px;" cx="289" cy="355" rx="12.126" ry="12.126"/>
+  <ellipse style="fill: rgb(113, 25, 148); stroke: rgb(113, 25, 148); stroke-width: 5px;" cx="362" cy="304" rx="12.126" ry="12.126"/>
+  <ellipse style="fill: rgb(113, 25, 148); stroke: rgb(113, 25, 148); stroke-width: 5px;" cx="307" cy="211" rx="12.126" ry="12.126"/>
+  <ellipse style="fill: rgb(113, 25, 148); stroke: rgb(113, 25, 148); stroke-width: 5px;" cx="349" cy="169" rx="12.126" ry="12.126"/>
+</svg>

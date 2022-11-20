@@ -1,6 +1,8 @@
 #include <vector>
+#include <map>
 #include <SDL2/SDL.h>
 #include "bms.h"
+#include "chaneditor.h"
 
 #pragma once
 
@@ -9,24 +11,30 @@ using namespace std;
 class Editor {
 public:
 	SDL_Renderer* renderer;
-	BMS::MDMFile* file;
 
-	vector<int> layers;
-	float vZoom;
-	float vSpan;
-	float hZoom;
-	float hSpan;
+	vector<ChanEditor*> channels;
+	int rank;
 
-	Editor(SDL_Renderer* renderer, BMS::MDMFile* file);
+	Editor();
+	Editor(SDL_Renderer* renderer);
 
-	void Begin();
+	static bool Init(SDL_Renderer* renderer);
+	static void DisplayChannels();
+	static void ReloadBPMChanges();
+	static float GetBeatPos();
+	static int GetHoveredChannel();
+	static int Editor::GetSnapedBeat();
 
-	void DisplayBeatLayer(int rank);
+	static string selectednote;
+	static Editor instance;
+	static int beatsnap;
+
 private:
 	int nextwindowX;
 	int nextwindowY;
 	int nextwindowW;
 	int nextwindowH;
 
-	int BeatCount(int rank);
+	// beat count since last change, bpm
+	map<float, float> bpmchanges;
 };

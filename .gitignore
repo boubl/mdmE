@@ -8,6 +8,7 @@ out/
 include/*
 lib/*
 codeReview/
+build/
 
 # User-specific files
 *.rsuser

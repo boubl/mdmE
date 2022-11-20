@@ -1,4 +1,5 @@
 #pragma once
+
 #include <string>
 #include <map>
 #include <vector>
@@ -17,6 +18,20 @@ namespace helpPlease {
 	void replaceAll(string& str, const string& from, const string& to);
 }
 
+enum HideBmsMode {
+	Click, //Default, the hidden chart will activate by spam-clicking on the difficulty text.
+	Press, //The hidden chart will activate by pressing and holding on the chart's cover art in the song select.
+	Toggle //The custom chart will activate by switching between all three difficulties back and forth like ouroboros hidden. This requires 3 difficulties.
+};
+
+enum HideBmsDifficulty {
+	Special = -1,
+	Default,
+	Easy,
+	Hard,
+	Master
+};
+
 namespace BMS {
 
 	class MDMFile {
@@ -25,15 +40,20 @@ namespace BMS {
 		string author;
 		string bpmInfo;//in info.json file, bpm is a string and is more informative than useful
 		float bpm[4];
-		string scene;
+		string scene[4];
 		string designers[4];
 		int difficulties[4];
-		// ranks (array) -> measures (list) -> channels (map) -> notes (list)
+		bool ismapactive[4];
+		HideBmsMode hideBmsMode;
+		HideBmsDifficulty hideBmsDifficulty;
+		string hideBmsMessage;
+		// ranks (array of measures) -> measures (map of channels) -> channels (list of notes) -> notes (simple string)
 		CHART charts[4];
 
 		HSTREAM music;
 
 		MDMFile();
+		~MDMFile();
 
 		bool Save(string file);
 		bool Load(string file);

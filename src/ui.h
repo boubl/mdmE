@@ -4,7 +4,7 @@
 #include "IconsFontAwesome5.h"
 #include "bms.h"
 #include "editor.h"
-#include <ImGuiFileDialog/ImGuiFileDialog.h>
+#include <tinyfiledialogs/tinyfiledialogs.h>
 #include <iostream>
 
 #pragma once
@@ -16,7 +16,7 @@ namespace ui {
 		static int TopBarHeight;
 		static int SideBarWidth;
 
-		MainLayout(BMS::MDMFile* mdmfile, Editor* editor);
+		MainLayout(BMS::MDMFile* mdmfile);
 
 		void DrawUI();
 
@@ -38,7 +38,6 @@ namespace ui {
 		void DrawMainBar();
 		void DrawToolBar();
 		void DrawNotesBar();
-		void DisplayFileDialogs();
 		void Preferences();
 		void EditEditorView();
 		void Kits();

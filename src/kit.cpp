@@ -5,11 +5,16 @@
 #include <iostream>
 #include <fstream>
 
+map<string, Note*> Kit::allnotes;
+map<string, Event*> Kit::allevents;
+map<string, Channel*> Kit::allchannels;
+map<string, string> Kit::allscenes;
+
 Note::Note() :
 	name(""),
 	type((NoteType)0),
-	sound(false),
-	sprite(false),
+	sound(""),
+	sprite(""),
 	channels(vector<string>()) {
 
 }
@@ -32,43 +37,33 @@ Kit::Kit() :
 {
 }
 
-bool Kit::LoadZip(string filepath) {
-	zip_t* zip = zip_open(filepath.c_str(), ZIP_DEFAULT_COMPRESSION_LEVEL, 'r');
-
-	void* infoBuf;
-	size_t infoSize = 0;
-	if (zip_entry_open(zip, "kit.json") == 0)
+bool Kit::LoadZip(string dirpath, string filename) {
+	string a = dirpath + filename;
+	string b = dirpath + filename.erase(filename.size() - 4);
+	int error = zip_extract(a.c_str(), b.c_str(), NULL, NULL);
+	if (error == 0)
 	{
-		zip_entry_read(zip, &infoBuf, &infoSize);
+		LoadDir(b + "/");
 	}
 	else {
-		cout << "Couldn't open kit.json in the archive. Abort loading the kit." << endl;
-		return false;
-	}
-	char* tmp = (char*)calloc(infoSize + 1, sizeof(char));
-	snprintf(tmp, infoSize + 1, "%s", (char*)infoBuf);
-	nlohmann::json j = nlohmann::json::parse(tmp);
-
-	if (!LoadInfo(&j)) {
-		cout << "Couldn't load kit.json correctly." << endl;
+		cout << "Couldn't extract \"" << filename << ".zip\". Error: " << zip_strerror(error) << endl;
 		return false;
 	}
 
-	activated = true;
-
-	free(infoBuf);
-	free(tmp);
+	string newname = a + ".old";
+	int i = rename(a.c_str(), newname.c_str());
 
 	return true;
 }
 
 bool Kit::LoadDir(string dirpath) {
+	dir = dirpath;
 	ifstream f;
 	string path = dirpath + "kit.json";
 	f.open(path.c_str(), ios::in);
 	nlohmann::json j = nlohmann::json::parse(f);
 
-	if (!LoadInfo(&j)) {
+	if (!LoadInfo(j)) {
 		cout << "Couldn't load kit.json correctly.";
 		return false;
 	}
@@ -79,13 +74,13 @@ bool Kit::LoadDir(string dirpath) {
 	return true;
 }
 
-bool Kit::LoadInfo(nlohmann::json* info) {
-	if (info->contains("name")) {
-		if (!info->at("name").is_string()) {
+bool Kit::LoadInfo(nlohmann::json& info) {
+	if (info.contains("name")) {
+		if (!info.at("name").is_string()) {
 			cout << "Kit's name isn't a string, abort loading it." << endl;
 			return false;
 		}
-		name = info->at("name").get<string>();
+		name = info.at("name").get<string>();
 	}
 	else {
 		cout << "Kit doesn't have a name, abort loading it." << endl;
@@ -93,17 +88,17 @@ bool Kit::LoadInfo(nlohmann::json* info) {
 	}
 
 	//version isn't required
-	if (info->contains("version") && info->at("version").is_string())
-		version = info->at("version").get<string>();
+	if (info.contains("version") && info.at("version").is_string())
+		version = info.at("version").get<string>();
 	else {
 		cout << "Kit doesn't have a version, setting it to Unknown" << endl;
 		version = "Unknown";
 	}
 
 	//notes aren't required
-	if (info->contains("notes") && info->at("notes").is_object()) {
+	if (info.contains("notes") && info.at("notes").is_object()) {
 		notes = NoteFolder();
-		LoadNoteFolder(&info->at("notes"), &notes);
+		LoadNoteFolder(info.at("notes"), notes);
 	}
 	else {
 		cout << "Kit doesn't have any notes defined, nothing to load." << endl;
@@ -111,9 +106,9 @@ bool Kit::LoadInfo(nlohmann::json* info) {
 	}
 
 	//events aren't required
-	if (info->contains("events") && info->at("events").is_object()) {
+	if (info.contains("events") && info.at("events").is_object()) {
 		events = EventFolder();
-		LoadEventFolder(&info->at("events"), &events);
+		LoadEventFolder(&info.at("events"), &events);
 	}
 	else {
 		cout << "Kit doesn't have any events defined, nothing to load." << endl;
@@ -121,9 +116,9 @@ bool Kit::LoadInfo(nlohmann::json* info) {
 	}
 
 	//channels aren't required
-	if (info->contains("channels") && info->at("channels").is_object()) {
+	if (info.contains("channels") && info.at("channels").is_object()) {
 		channels = map<string, Channel>();
-		LoadChannels(&info->at("channels"), &channels);
+		LoadChannels(&info.at("channels"), &channels);
 	}
 	else {
 		cout << "Kit doesn't have any channel defined, nothing to load." << endl;
@@ -131,9 +126,9 @@ bool Kit::LoadInfo(nlohmann::json* info) {
 	}
 
 	//scenes aren't required
-	if (info->contains("scenes") && info->at("scenes").is_object()) {
+	if (info.contains("scenes") && info.at("scenes").is_object()) {
 		scenes = map<string, string>();
-		nlohmann::json* jscenes = &info->at("scenes");
+		nlohmann::json* jscenes = &info.at("scenes");
 		for (auto ent = jscenes->begin(); ent != jscenes->end(); ent++) {
 			if (ent->is_string())
 				scenes.insert({ ent.key(), ent->get<string>() });
@@ -147,11 +142,11 @@ bool Kit::LoadInfo(nlohmann::json* info) {
 	}
 }
 
-void Kit::LoadNoteFolder(nlohmann::json* jfolder, NoteFolder* nfolder) {
-	nfolder->folders = map<string, NoteFolder>();
-	nfolder->notes = map<string, Note>();
+void Kit::LoadNoteFolder(nlohmann::json& jfolder, NoteFolder& nfolder) {
+	nfolder.folders = map<string, NoteFolder>();
+	nfolder.notes = map<string, Note>();
 
-	for (auto ent = jfolder->begin(); ent != jfolder->end(); ent++) {
+	for (auto ent = jfolder.begin(); ent != jfolder.end(); ent++) {
 		string entryKey = ent.key();
 		if (entryKey.size() == 2) {
 			Note note = Note();
@@ -201,25 +196,25 @@ void Kit::LoadNoteFolder(nlohmann::json* jfolder, NoteFolder* nfolder) {
 				continue;
 			}
 
-			if (jnote->contains("sound") && jnote->at("sound").is_boolean())
-				note.sound = jnote->at("sound").get<bool>();
+			if (jnote->contains("sound") && jnote->at("sound").is_string())
+				note.sound = jnote->at("sound").get<string>();
 			else {
-				cout << "Note doesn't have a sound field, setting it to false" << endl;
-				note.sound = false;
+				cout << "Note doesn't have a sound field, setting it to nothing" << endl;
+				note.sound = "";
 			}
 
 			if (jnote->contains("sprite") && jnote->at("sprite").is_boolean())
 				note.sprite = jnote->at("sprite").get<bool>();
 			else {
-				cout << "Note doesn't have a sprite field, setting it to false" << endl;
-				note.sprite = false;
+				cout << "Note doesn't have a sprite field, setting it to nothing" << endl;
+				note.sprite = "";
 			}
 
-			nfolder->notes.insert({ entryKey, note });
+			nfolder.notes.insert({ entryKey, note });
 		}
 		else {
-			nfolder->folders.insert({ entryKey, NoteFolder() });
-			LoadNoteFolder(&ent.value(), &nfolder->folders.at(entryKey));
+			nfolder.folders.insert({ entryKey, NoteFolder() });
+			LoadNoteFolder(ent.value(), nfolder.folders.at(entryKey));
 		}
 	}
 }
