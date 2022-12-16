@@ -1,6 +1,6 @@
 #include <vector>
 #include <map>
-#include <SDL2/SDL.h>
+#include "SDL.h"
 #include "bms.h"
 #include "chaneditor.h"
 

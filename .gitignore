@@ -9,6 +9,7 @@ include/*
 lib/*
 codeReview/
 build/
+.cache/
 
 # User-specific files
 *.rsuser

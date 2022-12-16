@@ -1,7 +1,7 @@
 #include <string>
 #include <map>
 
-#include <bass/bass.h>
+#include <miniaudio.h>
 
 #pragma once
 

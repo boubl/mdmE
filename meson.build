@@ -1,1 +1,0 @@
-project("mdmE", "cpp")

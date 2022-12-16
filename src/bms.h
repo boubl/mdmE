@@ -3,9 +3,9 @@
 #include <string>
 #include <map>
 #include <vector>
-#include <zip/zip.h>
+#include <zip.h>
 #include <nlohmann/json.hpp>
-#include <bass/bass.h>
+#include <miniaudio.h>
 using namespace nlohmann;
 using namespace std;
 

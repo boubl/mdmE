@@ -1,9 +1,9 @@
-#include <imgui/imgui.h>
-#include <bass/bass.h>
+#include <imgui.h>
+#include <miniaudio.h>
 #include <map>
 #include "kit.h"
 #include "bms.h"
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #pragma once
 
